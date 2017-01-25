@@ -1,0 +1,7 @@
+#cmakedefine RL_MAX_LENGTH      @RL_MAX_LENGTH@
+#cmakedefine RL_HISTORY_HEIGHT  (@RL_HISTORY_HEIGHT@)
+#cmakedefine RL_HISTORY_FILE    "@RL_HISTORY_FILE@"
+#cmakedefine RL_WINDOW_WIDTH    @RL_WINDOW_WIDTH@
+#cmakedefine RL_SORT_HINTS
+#cmakedefine RL_USE_WRITE
+#cmakedefine RL_TEST
