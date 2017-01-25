@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.9)
-project(readline)
+cmake_minimum_required(VERSION 3.0)
+project(readline VERSION 1.1.7)
 
 OPTION(BUILD_EXAMPLES     "build examples" OFF)
 
@@ -16,7 +16,16 @@ set(sources readline.c)
 
 add_library(readline SHARED ${sources})
 add_library(readline-static STATIC ${sources})
+SET_TARGET_PROPERTIES(readline PROPERTIES VERSION ${PROJECT_VERSION_MAJOR})
 SET_TARGET_PROPERTIES(readline-static PROPERTIES OUTPUT_NAME readline)
+
+INSTALL(FILES readline.h
+	DESTINATION include
+)
+INSTALL(TARGETS readline readline-static
+	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib
+)
 
 
 ADD_SUBDIRECTORY(examples)
