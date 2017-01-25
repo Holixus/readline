@@ -34,6 +34,9 @@ void rl_dump_hint(char const *fmt, ...);
 
 void readline_init(rl_get_completion_fn *gc);
 void readline_free();
+
+void readline_history_load(char const *file);
+
 char *readline(char const *prompt, char const *string);
 #ifdef RL_TEST
 char *readline_test(char const *prompt, char const *string);

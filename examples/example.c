@@ -142,7 +142,9 @@ _sub:
 }
 
 
-int is_cmd(char const *line, char const *cmd) {
+/* -------------------------------------------------------------------------- */
+int is_cmd(char const *line, char const *cmd)
+{
 	char const *end = line;
 	for (; *end && *end != ' '; ++end);
 	for (; line < end && *cmd; ++line, ++cmd)
@@ -156,13 +158,13 @@ int is_cmd(char const *line, char const *cmd) {
 int main(int argc, char *argv[])
 {
 	readline_init(rl_get_completion);
-
+	readline_history_load("./.history");
 	char *line;
 	do {
 		line = readline("ogo>", argc > 1 ? argv[1] : NULL);
 		printf("exec '%s'\n", line);
 #ifdef RL_TEST
-		if (!strcmp(line, "test"))
+		if (is_cmd(line, "test"))
 			readline_test("ogo>", argc > 1 ? argv[1] : NULL);
 #endif
 	} while (line && !is_cmd(line, "exit"));

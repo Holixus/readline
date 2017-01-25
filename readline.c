@@ -98,6 +98,7 @@ typedef unsigned int rl_glyph_t;
 /* -------------------------------------------------------------------------- */
 typedef 
 struct rl_history {
+	char const *file;
 	char *line;
 	char *lines[RL_HISTORY_HEIGHT];
 	int size, current;
@@ -879,9 +880,12 @@ _exit:
 /* -------------------------------------------------------------------------- */
 STATIC void history_save()
 {
-#ifdef RL_HISTORY_FILE
+	char const *file = rl_state->history.file;
+	if (!file)
+		return;
+
 	char buf[RL_MAX_LENGTH*2], *in = buf;
-	int fd = open(RL_HISTORY_FILE, O_CREAT|O_WRONLY|O_TRUNC, 0644);
+	int fd = open(file, O_CREAT|O_WRONLY|O_TRUNC, 0644);
 	if (fd < 0)
 		return;
 
@@ -895,7 +899,6 @@ STATIC void history_save()
 	}
 
 	close(fd);
-#endif
 }
 
 /* -------------------------------------------------------------------------- */
@@ -933,14 +936,18 @@ STATIC void history_add(char const *string)
 }
 
 /* -------------------------------------------------------------------------- */
-STATIC void history_restore()
+void readline_history_load(char const *file)
 {
-#ifdef RL_HISTORY_FILE
-	int fd = open(RL_HISTORY_FILE, O_RDONLY);
-	if (fd < 0)
-		return;
+	if (!file)
+		file = RL_HISTORY_FILE;
+
+	rl_state->history.file = file;
 
 	history_empty();
+
+	int fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return;
 
 	char line[RL_MAX_LENGTH*2 + 4];
 	char *in = line, *iend = line + sizeof(line) - 1;
@@ -960,7 +967,6 @@ STATIC void history_restore()
 	}
 
 	close(fd);
-#endif
 }
 
 /* -------------------------------------------------------------------------- */
@@ -988,7 +994,6 @@ void readline_init(rl_get_completion_fn *gc)
 		readline_free();
 	rl_state = (rl_state_t *)malloc(sizeof(rl_state_t));
 	memset(rl_state, 0, sizeof(*rl_state));
-	history_restore();
 	rl_state->_get_completion = gc;
 	rl_window_init();
 }
@@ -1206,4 +1211,3 @@ char *readline_test(char const *prompt, char const *string)
 	return rl_state->raw;
 }
 #endif
-
