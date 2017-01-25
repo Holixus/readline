@@ -44,27 +44,52 @@ typedef char const *(rl_get_completion_fn)(char const *start, char const *cur_po
 void readline_init(rl_get_completion_fn *gc);
 ```
 
+Init internal buffers and set completion function value (can be NULL).
+
+
 ### readline free
 ```c
 void readline_free();
 ```
+Save commands history and free internal buffers of library.
+
 
 ### readline_history_load
 ```c
 void readline_history_load(char const *file);
 ```
+* `file` -- a name of history file. If value is NULL will be used default history file name (`/tmp/.history`).
+
+Set history file name and load it.
+
 
 ### readline
+
+Start readline editor. Then finished returns pointer to char buffer contains entered text.
+
 ```c
 char *readline(char const *prompt, char const *init);
 ```
 
+* `prompt` -- a prompt string;
+* `init` -- initial readline buffer content.
+
+
 ### Completion
+
+The next functions should be used in completion function setted in readline_init call.
 
 ```c
 void rl_dump_options(char const * const *options);
+```
+
+Dumps sorted options list.
+
+```c
 void rl_dump_hint(char const *fmt, ...);
 ```
+
+Prints formatted hist.
 
 
 ### Example
